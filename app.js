@@ -19,13 +19,12 @@ app.controller("ListCtrl", function ($scope, $http) {
                           $scope.error = true;
                         }
                       });  
-
-                    });
-                    
                    $scope.movie = titles;
                    $scope.results = true;
                    $scope.error = false;
                    $scope.loading = false;
+                    });
+                    
 
 
                })
