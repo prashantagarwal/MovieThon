@@ -10,9 +10,7 @@ app.controller("ListCtrl", function ($scope, $http) {
                     var count = res.data.Search.length;
                     angular.forEach(res.data.Search, function(item){
                        $http.get('http://www.omdbapi.com/?t=' + item.Title + '&y=&plot=full&r=json').then(function(res){
-                       if (res.data.Poster === "N/A") {
-                         res.data.Poster = "http://placehold.it/350x450/FF6F59/FFFFFF&text=Image+not+Available!!";
-                       }
+                         res.data.Poster = "http://placehold.it/350x450/FF6F59/FFFFFF&text=Image+not+Available!!";                    
                         titles.push(res.data); 
                         if (!count-- && !titles.length) {
                           $scope.results = false;
@@ -38,9 +36,8 @@ app.controller("ListCtrl", function ($scope, $http) {
     $scope.saveMovie = function (imdbID) {
         $http.get(' http://www.omdbapi.com/?i=' + imdbID + '&plot=short&r=json')
          .then(function (res) {
-             if (res.data.Poster === "N/A") {
                 res.data.Poster = "http://placehold.it/350x450/FF6F59/FFFFFF&text=Image+not+Available!!";
-             }
+             
              $scope.savedMovies.push(res.data);
          });
     };
