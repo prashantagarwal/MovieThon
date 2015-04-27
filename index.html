@@ -1,0 +1,116 @@
+<html ng-app="app">
+<head>
+<title>MovieThon</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+<script src="app.js"></script>
+</head>
+<body >
+    <div ng-controller="ListCtrl">
+        <div class="container">
+          
+                <h1 class="logo">
+                    MovieThon <span class="glyphicon glyphicon-film"></span>
+                </h1>
+         
+            <div class="search">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form ng-submit="submit()" class="form-horizontal">
+                            <div class="input-group">
+                                <input autofocus required ng-model="search" type="text" class="form-control input-lg" placeholder="Search for a movie!">
+
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default btn-lg" type="submit">Go!</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+    <div class="btn-group" dropdown is-open="status.isopen">
+      <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+        SORT BY <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#" ng-click="predicate='Title'">Title (A -> Z)</a></li>
+        <li><a href="#" ng-click="predicate='-Title'">Title (Z -> A)</a></li> 
+        <li><a href="#" ng-click="predicate='-imdbRating'">IMDB Ratings (MAX)</a></li>
+        <li><a href="#" ng-click="predicate='imdbRating'">IMDB Ratings (MIN)</a></li>
+      </ul>
+    </div>
+
+    <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">My WatchList</button>
+    <hr>
+    <div collapse="isCollapsed">
+                    <div class="well">
+                <div class="row">
+                      <div class="col-sm-4 col-md-2 col-xs-6 " ng-repeat="saved in savedMovies">
+                        <div class="thumbnail">
+                            <img width="120px"ng-src="{{saved.Poster}}" alt="{{saved.Title}}">
+                            <div class="caption">
+                            <h5><a ng-href="http://www.imdb.com/title/{{saved.imdbID}}/" target="_blank">{{saved.Title}}</a></h5>
+                            <p><a href="#" class="btn btn-primary btn-xs" ng-click="remove(saved)" class="pull-right" role="button">Remove</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+    </div>
+            <br><br>
+            <div class="alert alert-info" ng-show="loading">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div>Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div class="well" ng-show="results" ng-repeat="m in movie | orderBy:predicate">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a ng-href="http://www.imdb.com/title/{{m.imdbID}}/" target="_blank">
+                            <img class="img-responsive" ng-src="{{m.Poster}}" alt="{{m.Title}}" />
+                        </a>
+                    </div>
+
+                    <div class="col-md-8">
+                        <button type="button" class="close" ng-click="results = !results">
+                            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                        </button>
+
+                        <h1>
+                            <a ng-href="http://www.imdb.com/title/{{m.imdbID}}/" target="_blank">{{m.Title}}</a> <small> {{m.imdbRating}}</small>
+                        </h1>
+                        {{m.Genre}},  {{m.Runtime}}<br />
+                        Released: {{m.Released}}
+
+                        <p class="lead">
+                            <b>Director:</b> {{m.Director}}<br />
+                            <b>Actors:</b> {{m.Actors}}<br>
+                        </p>
+
+                        <p>{{m.Plot}}</p>
+                        <p>{{m.Awards}}</p>
+
+                        <button class="btn btn-success" ng-click="saveMovie(m.imdbID)"><span class="glyphicon glyphicon-plus"></span> Add to watchlist</button>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="alert alert-danger" role="alert" ng-show="error">
+                <strong>Ooops!</strong> Couldnt find a movie with that name.
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>
