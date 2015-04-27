@@ -7,13 +7,19 @@ app.controller("ListCtrl", function ($scope, $http) {
         $http.get('http://www.omdbapi.com/?s=' + $scope.search + '&r=json')
                .then(function (res) {
                     var titles = [];
+                    var count = res.data.Search.length;
                     angular.forEach(res.data.Search, function(item){
                        $http.get('http://www.omdbapi.com/?t=' + item.Title + '&y=&plot=full&r=json').then(function(res){
                        if (res.data.Poster === "N/A") {
                          res.data.Poster = "http://placehold.it/350x450/FF6F59/FFFFFF&text=Image+not+Available!!";
                        }
                         titles.push(res.data); 
+                        if (!count-- && !titles.length) {
+                          $scope.results = false;
+                          $scope.error = true;
+                        }
                       });  
+
                     });
                     
                    $scope.movie = titles;
